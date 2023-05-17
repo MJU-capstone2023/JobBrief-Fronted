@@ -1,26 +1,25 @@
 <template id="app">
   <div class="container">
     <HeaderPage></HeaderPage>
-    <hr>
-    <CollectionPage></CollectionPage>
-    <hr>
-    <NewsList></NewsList>
+    <router-view/>
   </div>
 </template>
+
  
 <script>
 import HeaderPage from './components/HeaderPage.vue';
-import CollectionPage from './components/CollectionPage.vue';
-import NewsList from './components/NewsList.vue';
-
+// import CollectionPage from './components/CollectionPage.vue';
+// import NewsList from './components/NewsList.vue';
+// import LoginPageVue from './components/LoginPage.vue';
+// import JoinPage from './components/JoinPage.vue'
+// import NewsPage from  './components/NewsPage.vue'
 
 export default {
   name: 'App',
   components: {
-    HeaderPage,
-    CollectionPage,
-    NewsList
+    HeaderPage
   }
+  
 }
 </script>
  
