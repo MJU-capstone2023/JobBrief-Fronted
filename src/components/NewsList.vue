@@ -17,13 +17,14 @@ export default {
     data() {
       return {
         article: {
+          id: 1,
           title: '샘플 기사 제목',
           author: '홍길동',
           published: '2023-05-10',
           content: '<p>샘플 기사 내용</p>'
         }        
       }
-    }
+  }
 }
 </script>
 
