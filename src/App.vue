@@ -1,37 +1,25 @@
 <template id="app">
-
   <div class="container">
-    <hr>
     <HeaderPage></HeaderPage>
     <hr>
-    <login-page></login-page>
+    <CollectionPage></CollectionPage>
     <hr>
-    <JoinPage></JoinPage>
-    <hr>
-    <BAF></BAF>
-    <hr>
-    <router-view></router-view>
-  </div>
-
-  <div>
-  
-
+    <NewsList></NewsList>
   </div>
 </template>
  
 <script>
-import HeaderPage from './components/HeaderPage.vue'
-import BAF from './components/BAF.vue'
-import LoginPage from './components/LoginPage.vue'
-import JoinPage from './components/JoinPage.vue'
+import HeaderPage from './components/HeaderPage.vue';
+import CollectionPage from './components/CollectionPage.vue';
+import NewsList from './components/NewsList.vue';
+
 
 export default {
   name: 'App',
   components: {
     HeaderPage,
-    BAF,
-    LoginPage,
-    JoinPage
+    CollectionPage,
+    NewsList
   }
 }
 </script>
@@ -51,6 +39,4 @@ export default {
   justify-content: space-between; 
   margin: 20px 0; 
 }
-
-
 </style>
