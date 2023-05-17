@@ -1,7 +1,4 @@
 <template>
-  <div>
-    회원가입 컴포넌트 테스트
-  </div>
   <div class="container-fluid">
     <div class="row justify-content-center">
       <div class="col-md-4">
@@ -11,6 +8,9 @@
             <div class="form-group">
               <label for="username">Username:</label>
               <input type="text" class="form-control" id="username" v-model="username">
+            </div>
+            <div class="card-footer">
+            <button type="submit" class="btn btn-primary btn-block">아이디 중복확인</button>
             </div>
             <div class="form-group">
               <label for="password">Password:</label>

@@ -1,7 +1,4 @@
 <template>
-  <div>
-    로그인 테스트 컴포넌트
-  </div>
   <div class="container-fluid">
     <div class="row justify-content-center">
       <div class="col-md-4">
