@@ -1,6 +1,5 @@
 # bootstrap-project
 
-난 선진
 ## Project setup
 ```
 npm install

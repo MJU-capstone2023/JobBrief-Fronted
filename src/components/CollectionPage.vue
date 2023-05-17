@@ -30,7 +30,6 @@ export default {
       color: black;
       display: flex;
       justify-content: center;
-      
   }
 
   .nav-bar ul {

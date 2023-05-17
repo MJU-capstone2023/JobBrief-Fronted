@@ -1,12 +1,11 @@
 <template>
     <div>
-      <h1>뉴스 기사 리스트</h1>
+      <h1>게시판 글 목록</h1>
       <ul>
-        <li>
-          <h2>{{ article.title }}</h2>
+        <li v-for="post in posts" :key="post.id" @click="goToPost(post.id)">
+          <h2>제목 : {{ article.title }}</h2>
           <p>작성자: {{ article.author }}</p>
-          <p>발행일: {{ article.published }}</p>
-          <div v-html="article.content"></div>
+          <p>작성일: {{ article.date }}</p>
         </li>
       </ul>
     </div>

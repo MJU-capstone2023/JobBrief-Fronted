@@ -2,6 +2,7 @@
   <div class="container">
     <HeaderPage></HeaderPage>
     <hr>
+    <MyPage></MyPage>
     <CollectionPage></CollectionPage>
     <hr>
     <NewsList></NewsList>
@@ -12,6 +13,7 @@
 import HeaderPage from './components/HeaderPage.vue';
 import CollectionPage from './components/CollectionPage.vue';
 import NewsList from './components/NewsList.vue';
+import MyPage from './components/MyPage.vue';
 
 
 export default {
@@ -19,7 +21,8 @@ export default {
   components: {
     HeaderPage,
     CollectionPage,
-    NewsList
+    NewsList,
+    MyPage
   }
 }
 </script>
