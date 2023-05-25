@@ -24,13 +24,12 @@ export default {
 }
 </script>
 
-  <style>
+<style>
   .nav-bar {
       padding: 50px;
       color: black;
       display: flex;
       justify-content: center;
-      
   }
 
   .nav-bar ul {

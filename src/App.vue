@@ -1,11 +1,11 @@
 <template id="app">
   <div class="container">
     <HeaderPage></HeaderPage>
+    <hr>
     <router-view/>
   </div>
 </template>
 
- 
 <script>
 import HeaderPage from './components/HeaderPage.vue';
 // import CollectionPage from './components/CollectionPage.vue';
@@ -25,7 +25,7 @@ export default {
  
 <style>
   #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
+    font-family: Avenir, Helvetica, Arial, sans-serif;  
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
@@ -38,4 +38,5 @@ export default {
   justify-content: space-between; 
   margin: 20px 0; 
 }
+
 </style>
