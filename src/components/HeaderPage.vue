@@ -15,9 +15,10 @@
 export default {
   data() {
     return {
-      items: ['전체', '생산/품질', 'IT개발', '인사/총무', '재무/회계/금융', '전략/기획', '영업/영업관리', '마케팅/MD', '컬렉션', '마이페이지', '회원가입']
+      items: ['전체', '생산/품질', 'IT개발', '인사/총무', '재무/회계/금융', '전략/기획', '영업/영업관리', '마케팅/MD', '컬렉션', '마이페이지', '로그인', '회원가입']
     }
   },
+
   methods: {
     handleItemClick(index) {
       console.log(`Item ${index} clicked`)

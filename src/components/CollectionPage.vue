@@ -24,7 +24,7 @@ export default {
 }
 </script>
 
-  <style>
+<style>
   .nav-bar {
       padding: 50px;
       color: black;
