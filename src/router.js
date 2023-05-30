@@ -1,21 +1,23 @@
-// import HeaderPage from './components/HeaderPage.vue';
-// import CollectionPage from './components/CollectionPage.vue';
-import NewsList from './components/NewsList.vue';
-import LoginPageVue from './components/LoginPage.vue';
+import MyPage from './components/MyPage.vue'
+import NewsList from './components/NewsList.vue'
+import LoginPageVue from './components/LoginPage.vue'
 import JoinPage from './components/JoinPage.vue'
 import NewsPage from  './components/NewsPage.vue'
+import CollectionPage from  './components/CollectionPage.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
-// import LoginPageVue from './components/LoginPage.vue'
-// import JoinPage from './components/JoinPage.vue'
 
 const routes = [
   {
-    path: '/',
+    path: '/mypage',
+    component: MyPage
+  },
+  {
+    path: '/newsList',
     component: NewsList
   },
   {
-    path: '/news/:id',
+    path: '/newsPage',
     component: NewsPage
   },
   {
@@ -25,6 +27,10 @@ const routes = [
   {
     path: '/join',
     component: JoinPage
+  },  
+  {
+    path: '/collection',
+    component: CollectionPage
   }
 ]
 

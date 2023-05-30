@@ -1,23 +1,33 @@
 <template id="app">
   <div class="container">
-    <HeaderPage></HeaderPage>
+    <NewsPage/>
+    <div>
+      <img src = "@/assets/배너.png" />
+    </div>
+    <hr>
+    <div class="nav-bar">
+      <router-link class="button" to="/newslist">전체</router-link>
+      <router-link class="button" to="/newslist">생산/품질</router-link>
+      <router-link class="button" to="/newslist">IT개발</router-link>
+      <router-link class="button" to="/newslist">인사/총무</router-link>
+      <router-link class="button" to="/newslist">재무/회계/금융</router-link>
+      <router-link class="button" to="/newslist">전략/기획</router-link>
+      <router-link class="button" to="/newslist">영업/영업관리</router-link>
+      <router-link class="button" to="/newslist">마케팅/MD</router-link>
+      <router-link class="button" to="/collection">컬렉션</router-link>
+      <router-link class="button" to="/mypage">마이페이지</router-link>
+      <router-link class="button" to="/login">로그인</router-link>
+      <router-link class="button" to="/join">회원가입</router-link>    
+    </div>
     <hr>
     <router-view/>
   </div>
 </template>
 
 <script>
-import HeaderPage from './components/HeaderPage.vue';
-// import CollectionPage from './components/CollectionPage.vue';
-// import NewsList from './components/NewsList.vue';
-// import LoginPageVue from './components/LoginPage.vue';
-// import JoinPage from './components/JoinPage.vue'
-// import NewsPage from  './components/NewsPage.vue'
-
 export default {
   name: 'App',
   components: {
-    HeaderPage
   }
   
 }
@@ -37,6 +47,26 @@ export default {
   flex-direction: row; 
   justify-content: space-between; 
   margin: 20px 0; 
-}
+  }
+  .nav-bar {
+    background-color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .button {
+    margin: 0 10px;
+    padding: px 10px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s ease;
+  }
+
+  .button:hover {
+    background-color: #333;
+    color: #fff;
+  }
 
 </style>

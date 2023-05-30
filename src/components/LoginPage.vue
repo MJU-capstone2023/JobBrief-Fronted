@@ -3,19 +3,19 @@
     <div class="row justify-content-center">
       <div class="col-md-4">
         <form @submit.prevent="login" class="card">
-          <h2 class="card-header">Login</h2>
+          <h2 class="card-header">로그인</h2>
           <div class="card-body">
             <div class="form-group">
-              <label for="username">Username:</label>
+              <label for="username">아이디</label>
               <input type="text" class="form-control" id="username" v-model="username">
             </div>
             <div class="form-group">
-              <label for="password">Password:</label>
+              <label for="password">비밀번호</label>
               <input type="password" class="form-control" id="password" v-model="password">
             </div>
           </div>
           <div class="card-footer">
-            <button type="submit" class="btn btn-primary btn-block">Login</button>
+            <button type="submit" class="btn btn-primary btn-block">로그인</button>
           </div>
         </form>
       </div>
