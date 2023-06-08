@@ -1,26 +1,39 @@
 <template>
   <div class="my-list-group">
-    <div v-for="(newsList, index) in displayedNews" :key="index" class="my-list-group-item" :class="{ active: isActiveIndex === index }" @mouseenter="isActiveIndex = index" @mouseleave="isActiveIndex = null" @click="goToNews(newsList.id)">
+    <div
+      v-for="(newsItem, index) in displayedNews"
+      :key="index"
+      class="my-list-group-item"
+      :class="{ active: isActiveIndex === index }"
+      @mouseenter="isActiveIndex = index"
+      @mouseleave="isActiveIndex = null"
+      @click="goToNews(newsItem.id)"
+    >
       <div class="my-list-group-item-header">
-        <h5 class="my-list-group-item-title">{{ newsList.title }}</h5>
-        <small class="my-list-group-item-date">{{ newsList.pub_date }}</small>
+        <h5 class="my-list-group-item-title">{{ newsItem.title }}</h5>
+        <small class="my-list-group-item-date">{{ newsItem.pub_date }}</small>
       </div>
       <p class="my-list-group-item-content">
-        {{ newsList.summary }}
+        {{ newsItem.summary }}
       </p>
-      <small class="my-list-group-item-footer">{{ newsList.reporter }}</small>
+      <small class="my-list-group-item-footer">{{ newsItem.reporter }}</small>
     </div>
-    <hr>
+    <hr />
     <nav v-if="totalPages > 1" aria-label="Page navigation">
       <ul class="pagination">
         <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-          <button class="page-link" @click="prevPage">Previous</button>
+          <button class="page-link" @click="prevPage">이전</button>
         </li>
-        <li class="page-item" v-for="page in totalPages" :key="page" :class="{ 'active': page === currentPage }">
+        <li
+          class="page-item"
+          v-for="page in totalPages"
+          :key="page"
+          :class="{ 'active': page === this.currentPage }"
+        >
           <button class="page-link" @click="goToPage(page)">{{ page }}</button>
         </li>
-        <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
-          <button class="page-link" @click="nextPage">Next</button>
+        <li class="page-item" :class="{ 'disabled': this.currentPage === totalPages }">
+          <button class="page-link" @click="nextPage">다음</button>
         </li>
       </ul>
     </nav>
@@ -37,22 +50,37 @@ export default {
       currentPage: 1,
       totalPages: 0,
       pageSize: 10, // 페이지당 아이템 수
+      isActiveIndex: null, // 수정된 부분: isActiveIndex 추가
     };
   },
   mounted() {
     this.fetchNews();
   },
+  computed: {
+    displayedNews() {
+      // 현재 페이지에 따라 보여줄 뉴스 리스트를 계산하는 computed 속성
+      const startIndex = (this.currentPage - 1) * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      return this.newsList.slice(startIndex, endIndex);
+    },
+  },
   methods: {
     fetchNews() {
-      const apiUrl = `http://localhost:8082/api/news?job=all&page=${this.currentPage}`;
+      console.log(this.currentPage);
 
-      axios.get(apiUrl)
-        .then(response => {
+      const apiUrl = `http://localhost:8082/api/news?job=all&page=${this.currentPage}`;
+      console.log(apiUrl);
+
+      axios
+        .get(apiUrl)
+        .then((response) => {
           this.newsList = response.data.newsList;
+          console.log(this.newsList);
+
           this.totalPages = response.data.totalPages;
         })
-        .catch(error => {
-          console.error('API 오류:', error);
+        .catch((error) => {
+          console.error("API 오류:", error);
         });
     },
     goToPage(page) {
@@ -77,16 +105,13 @@ export default {
       // 뉴스 상세 페이지로 이동하는 로직 추가
     },
   },
-  computed: {
-    displayedNews() {
-      // 현재 페이지에 해당하는 뉴스 아이템을 반환하는 computed 속성 추가
-      const startIndex = (this.currentPage - 1) * this.pageSize;
-      const endIndex = startIndex + this.pageSize;
-      return this.newsList.slice(startIndex, endIndex);
-    },
-  },
 };
 </script>
+
+
+<style scoped>
+/* 여기에 컴포넌트의 스타일을 작성합니다. */
+</style>
 
 <style>
   .my-list-group-item {
