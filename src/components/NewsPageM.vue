@@ -15,12 +15,16 @@
   <div>
     <textarea v-model="scrap_opinion"></textarea>
   </div>
-  <div>
+  
+  <div v-if="authService.isAuthenticated()">
+  <textarea v-model="scrap_opinion"></textarea>
+  </div>
+  <div v-if="authService.isAuthenticated()">
     <textarea v-model="scrap_opinion"></textarea>
     <button @click="saveScrapOpinion">Save Scrap Opinion</button>
     <button @click="toggleBookmark" :class="{ 'bookmarked': isBookmarked }">
-    {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
-  </button>
+      {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
+    </button>
   </div>
 </template>
 
@@ -42,7 +46,7 @@ export default {
   methods: {
     fetchArticle() {
       axios
-        .get(`http://localhost:8082/api/news/member/${newsId}`) 
+        .get(`http://localhost:8082/api/news/member/${this.newsId}`)
         .then(response => {
           this.article = response.data;
         })
