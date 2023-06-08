@@ -8,7 +8,7 @@
     <div>
       <h5>Keywords:</h5>
       <ul>
-        <span v-for="(keywords, index) in article.keywords" :key="index">{{ keywords.keywordName }}</span>
+        <span v-for="(keyword, index) in article.keywords" :key="index">{{ keyword.keywordName }}</span>
       </ul>
     </div>
   </div>
@@ -53,8 +53,10 @@ export default {
 
   methods: {
     fetchArticle() {
+      const apiUrl = this.isAuthenticated ? `http://localhost:8082/api/news/member/${this.newsId}` : `http://localhost:8082/api/news/${this.newsId}`;
+
       axios
-        .get(`http://localhost:8082/api/news/${this.newsId}`)
+        .get(apiUrl)
         .then(response => {
           this.article = response.data;
           console.log(this.article);
@@ -67,6 +69,7 @@ export default {
     saveScrapOpinion() {
       // 스크랩 의견 저장 로직 구현
     },
+
     toggleBookmark() {
       if (this.isBookmarked) {
         this.removeBookmark();
@@ -74,30 +77,28 @@ export default {
         this.addBookmark();
       }
     },
+    
     addBookmark() {
-  const bookmarkApiUrl = "http://localhost:8082/api/bookmark/";
-  const accessToken = localStorage.getItem('accessToken');
+      const bookmarkApiUrl = "http://localhost:8082/api/bookmark/";
+      const accessToken = localStorage.getItem('accessToken');
 
-  axios
-    .post(bookmarkApiUrl, {
-      newsId: this.article.id,
-    }, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    })
-    .then(response => {
-      this.isBookmarked = true;
-      console.log("북마크 추가 완료");
-    })
-    .catch(error => {
-      console.error("북마크 추가 오류:", error);
-    });
-},
+      axios
+        .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
+        .then(response => {
+          this.isBookmarked = true;
+          console.log("북마크 추가 완료");
+        })
+        .catch(error => {
+          console.error("북마크 추가 오류:", error);
+        });
+    },
+
     removeBookmark() {
       const bookmarkApiUrl = "http://localhost:8082/api/bookmark/";
+      const accessToken = localStorage.getItem('accessToken');
+
       axios
-        .delete(bookmarkApiUrl + this.article.id)
+        .delete(bookmarkApiUrl + this.article.id, { headers: { Authorization: `Bearer ${accessToken}` } })
         .then(response => {
           this.isBookmarked = false;
           console.log("북마크 삭제 완료");
