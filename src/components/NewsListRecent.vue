@@ -1,12 +1,10 @@
 <template>
   <div class="my-list-group">
     <div
-      v-for="(newsItem, index) in this.newsList"
+      v-for="(newsItem, index) in recentnewsList"
       :key="index"
       class="my-list-group-item"
-      :class="{ active: isActiveIndex === index }"
-      @mouseenter="isActiveIndex = index"
-      @mouseleave="isActiveIndex = null"
+
       @click="goToNews(newsItem.id)"
     >
       <div class="my-list-group-item-header">
@@ -18,25 +16,6 @@
       </p>
       <small class="my-list-group-item-footer">{{ newsItem.reporter }}</small>
     </div>
-    <hr />
-    <nav v-if="totalPages > 1" aria-label="Page navigation">
-      <ul class="pagination">
-        <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
-          <button class="page-link" @click="prevPage">이전</button>
-        </li>
-        <li
-          class="page-item"
-          v-for="page in totalPages"
-          :key="page"
-          :class="{ 'active': page === this.currentPage }"
-        >
-          <button class="page-link" @click="goToPage(page)">{{ page }}</button>
-        </li>
-        <li class="page-item" :class="{ 'disabled': this.currentPage === totalPages }">
-          <button class="page-link" @click="nextPage">다음</button>
-        </li>
-      </ul>
-    </nav>
   </div>
 </template>
 
@@ -47,11 +26,8 @@ export default {
   data() {
     return {
       props: ['newsId'],
-      newsList: [],
-      currentPage: 1,
-      totalPages: 0,
-      pageSize: 10, // 페이지당 아이템 수
-      isActiveIndex: null, // 수정된 부분: isActiveIndex 추가
+      recentnewsList: [],
+      isActiveIndex: null,
     };
   },
   mounted() {
@@ -60,45 +36,27 @@ export default {
   
   methods: {
     fetchNews() {
-      console.log(this.currentPage);
-      const apiUrl = "ttp://localhost:8080/api/recent-news";
-      console.log(apiUrl);
-
+      const apiUrl = "http://localhost:8082/api/recent-news";
+      const accessToken = localStorage.getItem("accessToken");
       axios
-        .get(apiUrl)
+        .get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
         .then((response) => {
-          this.newsList = response.data.newsList;
-          console.log(this.newsList);
-          this.totalPages = response.data.totalPages;
+          this.recentnewsList = response.data.recentnewsList;
+          console.log(this.recentnewsList);
         })
         .catch((error) => {
           console.error("API 오류:", error);
         });
     },
-    goToPage(page) {
-      if (page !== this.currentPage) {
-        this.currentPage = page;
-        this.fetchNews();
-      }
-    },
-    prevPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-        this.fetchNews();
-      }
-    },
-    nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
-        this.fetchNews();
-      }
-    },
-    goToNews(newsId) {
-      this.$router.push(`/newspage/${newsId}`);
-    },
   },
 };
 </script>
+
+
 
 <style>
   .my-list-group-item {

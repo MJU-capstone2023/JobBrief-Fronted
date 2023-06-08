@@ -1,7 +1,7 @@
 <template>
   <div class="my-list-group">
     <div
-      v-for="(newsItem, index) in this.newsList"
+      v-for="(newsItem, index) in newsList"
       :key="index"
       class="my-list-group-item"
       :class="{ active: isActiveIndex === index }"
@@ -28,11 +28,11 @@
           class="page-item"
           v-for="page in totalPages"
           :key="page"
-          :class="{ 'active': page === this.currentPage }"
+          :class="{ 'active': page === currentPage }"
         >
           <button class="page-link" @click="goToPage(page)">{{ page }}</button>
         </li>
-        <li class="page-item" :class="{ 'disabled': this.currentPage === totalPages }">
+        <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
           <button class="page-link" @click="nextPage">다음</button>
         </li>
       </ul>
@@ -60,10 +60,7 @@ export default {
   
   methods: {
     fetchNews() {
-      console.log(this.currentPage);
-      const apiUrl = "http://localhost:8080/api/bookmark/all";
-      console.log(apiUrl);
-
+      const apiUrl = "http://localhost:8082/api/bookmark/all";
       const accessToken = localStorage.getItem("accessToken");
       axios
         .get(apiUrl, {
@@ -80,9 +77,31 @@ export default {
           console.error("API 오류:", error);
         });
     },
+    goToPage(page) {
+      if (page !== this.currentPage) {
+        this.currentPage = page;
+        this.fetchNews();
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+        this.fetchNews();
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+        this.fetchNews();
+      }
+    },
+    goToNews(newsId) {
+      this.$router.push(`/newspage/${newsId}`);
+    },
   },
 };
 </script>
+
 
 <style>
   .my-list-group-item {
