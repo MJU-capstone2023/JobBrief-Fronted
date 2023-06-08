@@ -1,7 +1,7 @@
 <template>
   <div class="my-list-group">
     <div
-      v-for="(newsItem, index) in displayedNews"
+      v-for="(newsItem, index) in this.newsList"
       :key="index"
       class="my-list-group-item"
       :class="{ active: isActiveIndex === index }"
@@ -46,6 +46,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      props: ['newsId'],
       newsList: [],
       currentPage: 1,
       totalPages: 0,
@@ -56,18 +57,10 @@ export default {
   mounted() {
     this.fetchNews();
   },
-  computed: {
-    displayedNews() {
-      // 현재 페이지에 따라 보여줄 뉴스 리스트를 계산하는 computed 속성
-      const startIndex = (this.currentPage - 1) * this.pageSize;
-      const endIndex = startIndex + this.pageSize;
-      return this.newsList.slice(startIndex, endIndex);
-    },
-  },
+  
   methods: {
     fetchNews() {
       console.log(this.currentPage);
-
       const apiUrl = `http://localhost:8082/api/news?job=all&page=${this.currentPage}`;
       console.log(apiUrl);
 
@@ -76,7 +69,6 @@ export default {
         .then((response) => {
           this.newsList = response.data.newsList;
           console.log(this.newsList);
-
           this.totalPages = response.data.totalPages;
         })
         .catch((error) => {
@@ -102,16 +94,11 @@ export default {
       }
     },
     goToNews(newsId) {
-      // 뉴스 상세 페이지로 이동하는 로직 추가
+      this.$router.push(`/newspage/${newsId}`);
     },
   },
 };
 </script>
-
-
-<style scoped>
-/* 여기에 컴포넌트의 스타일을 작성합니다. */
-</style>
 
 <style>
   .my-list-group-item {

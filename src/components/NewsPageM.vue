@@ -54,6 +54,20 @@ export default {
           console.error(error);
         });
     },
+    saveScrapOpinion() {
+      const scrapApiUrl = `http://localhost:8082/api/scrap/${this.article.id}`;
+      const requestData = {
+        opinion: this.scrap_opinion
+      };
+
+      axios.post(scrapApiUrl, requestData)
+        .then(response => {
+          console.log('스크랩 의견 저장 완료');
+        })
+        .catch(error => {
+          console.error('스크랩 의견 저장 오류:', error);
+        });
+    },
 
     toggleBookmark() {
       if (this.isBookmarked) {

@@ -36,7 +36,6 @@ export default {
   },
   methods: {
     login() {
-      // API 호출
       const apiUrl = 'http://localhost:8082/api/auth/login';
       const requestData = {
         userId: this.userId,
@@ -45,9 +44,10 @@ export default {
 
       axios.post(apiUrl, requestData)
         .then(response => {
-          localStorage.setItem('accessToken', response.data.accessToken);
+          const accessToken = response.data.accessToken;
+          localStorage.setItem('accessToken', accessToken);
           alert('로그인 되었습니다');
-          this.$router.push('/newsList'); // NewsList 페이지로 라우팅
+          this.$router.push('/newsList');
         })
         .catch(error => {
           alert('로그인 실패했습니다. 아이디와 비밀번호를 확인하세요');
@@ -57,6 +57,7 @@ export default {
   },
 };
 </script>
+
 
 
 <style scoped>
