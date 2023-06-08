@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" style="width: 500px">
     <h1>My Page</h1>
     <div class="form-group">
       <label>이름</label>
@@ -7,7 +7,7 @@
     </div>
     <div class="form-group">
       <label>연락처</label>
-      <input v-model="userInfo.phoneNumber" :disabled="!editing" class="form-control">
+      <input v-model="userInfo.phoneNumber" :disabled="!editing" class="form-control" >
     </div>
     <div class="form-group">
       <label>이메일</label>
@@ -38,29 +38,56 @@ export default {
 
   mounted() {
     this.fetchUserData();
+
+
   },
 
   methods: {
     fetchUserData() {
-      axios.get('http://localhost:8082/api/member/info')
+      const apiUrl = "http://localhost:8080/api/member/info";
+      const accessToken = localStorage.getItem("accessToken");
+      axios
+      .get(apiUrl,{
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+      })
         .then(response => {
           this.userInfo = response.data;
+          console.log(this.userInfo);
         })
         .catch(error => {
           console.error(error);
         });
     },
-
     saveUserData() {
-      axios.put('http://localhost:8082/api/member/info', this.userInfo)
-        .then(response => {
-          console.log('데이터 저장 성공');
-        })
-        .catch(error => {
-          console.error('데이터 저장 실패:', error);
-        });
-    },
+      const apiUrl = 'http://localhost:8080/api/member/info';
+      const accessToken = localStorage.getItem("accessToken");
 
+      console.log(accessToken);
+      
+
+      const formData = new FormData();
+      formData.append("id", this.userInfo.id);
+      formData.append("userId", this.userInfo.userId);
+      formData.append("name", this.userInfo.name);
+      formData.append("password", this.userInfo.password);
+      formData.append("phoneNumber", this.userInfo.phoneNumber);
+      formData.append("email", this.userInfo.email);
+
+      axios.post(apiUrl, formData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(response => {
+        console.log('데이터 저장 성공');
+      })
+      .catch(error => {
+        console.error('데이터 저장 실패:', error);
+      });
+    }
+,
     startEditing() {
       this.editing = true;
     },
