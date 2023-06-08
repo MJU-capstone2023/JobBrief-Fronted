@@ -1,101 +1,104 @@
 <template>
-  <div class="container" style="width: 500px">
-    <h1>My Page</h1>
-    <div class="form-group">
-      <label>이름</label>
-      <input v-model="userInfo.name" :disabled="!editing" class="form-control">
+  <div class="my-list-group">
+    <div
+      v-for="(newsItem, index) in newsList"
+      :key="index"
+      class="my-list-group-item"
+      :class="{ active: isActiveIndex === index }"
+      @mouseenter="isActiveIndex = index"
+      @mouseleave="isActiveIndex = null"
+      @click="goToNews(newsItem.id)"
+    >
+      <div class="my-list-group-item-header">
+        <h5 class="my-list-group-item-title">{{ newsItem.title }}</h5>
+        <small class="my-list-group-item-date">{{ newsItem.pub_date }}</small>
+      </div>
+      <p class="my-list-group-item-content">
+        {{ newsItem.summary }}
+      </p>
+      <small class="my-list-group-item-footer">{{ newsItem.reporter }}</small>
     </div>
-    <div class="form-group">
-      <label>연락처</label>
-      <input v-model="userInfo.phoneNumber" :disabled="!editing" class="form-control" >
-    </div>
-    <div class="form-group">
-      <label>이메일</label>
-      <input v-model="userInfo.email" :disabled="!editing" class="form-control">
-    </div>
-    <div class="form-group">
-      <label>비밀번호</label>
-      <input v-model="userInfo.password" :disabled="!editing" class="form-control" type="password">
-    </div>
-    <div class="form-group">
-      <button v-if="!editing" @click="startEditing" class="btn btn-primary">수정시작</button>
-      <button v-else @click="finishEditing" class="btn btn-primary">수정완료</button>
-    </div>
+    <hr />
+    <nav v-if="totalPages > 1" aria-label="Page navigation">
+      <ul class="pagination">
+        <li class="page-item" :class="{ 'disabled': currentPage === 1 }">
+          <button class="page-link" @click="prevPage">이전</button>
+        </li>
+        <li
+          class="page-item"
+          v-for="page in totalPages"
+          :key="page"
+          :class="{ 'active': page === currentPage }"
+        >
+          <button class="page-link" @click="goToPage(page)">{{ page }}</button>
+        </li>
+        <li class="page-item" :class="{ 'disabled': currentPage === totalPages }">
+          <button class="page-link" @click="nextPage">다음</button>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data() {
     return {
-      userInfo: {},
-      editing: false
+      props: ['newsId'],
+      newsList: [],
+      currentPage: 1,
+      totalPages: 0,
+      pageSize: 10, // 페이지당 아이템 수
+      isActiveIndex: null, // 수정된 부분: isActiveIndex 추가
     };
   },
-
   mounted() {
-    this.fetchUserData();
+    this.fetchNews();
   },
-
+  
   methods: {
-    fetchUserData() {
-      const apiUrl = "http://localhost:8082/api/member/info";
+    fetchNews() {
+      const apiUrl = "http://localhost:8082/api/bookmark/all";
       const accessToken = localStorage.getItem("accessToken");
-
       axios
         .get(apiUrl, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         })
-        .then(response => {
-          this.userInfo = response.data;
-          console.log(this.userInfo);
+        .then((response) => {
+          this.newsList = response.data.newsList;
+          console.log(this.newsList);
+          this.totalPages = response.data.totalPages;
         })
-        .catch(error => {
-          console.error(error);
+        .catch((error) => {
+          console.error("API 오류:", error);
         });
     },
-
-    saveUserData() {
-      const apiUrl = 'http://localhost:8082/api/member/info';
-      const accessToken = localStorage.getItem("accessToken");
-
-      const requestData = {
-        id: this.userInfo.id,
-        userId: this.userInfo.userId,
-        name: this.userInfo.name,
-        password: this.userInfo.password,
-        phoneNumber: this.userInfo.phoneNumber,
-        email: this.userInfo.email,
-      };
-
-      axios
-        .post(apiUrl, requestData, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json', // 추가: 요청 헤더에 콘텐츠 타입 설정
-          },
-        })
-        .then(response => {
-          console.log('데이터 저장 성공');
-        })
-        .catch(error => {
-          console.error('데이터 저장 실패:', error);
-        });
+    goToPage(page) {
+      if (page !== this.currentPage) {
+        this.currentPage = page;
+        this.fetchNews();
+      }
     },
-
-    startEditing() {
-      this.editing = true;
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+        this.fetchNews();
+      }
     },
-
-    finishEditing() {
-      this.editing = false;
-      this.saveUserData();
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+        this.fetchNews();
+      }
     },
-  }
+    goToNews(newsId) {
+      this.$router.push(`/newspage/${newsId}`);
+    },
+  },
 };
 </script>
 
