@@ -30,9 +30,10 @@ const requireAuth = (to, from, next) => {
 const routes = [
   { path: '/', redirect: '/newslist' },
   {
-    path: '/newspagem',
+    path: '/newspagem/:newsId',
     component: NewsPageM,
-    beforeEnter: requireAuth
+    beforeEnter: requireAuth,
+    props: true
   },
   {
     path: '/mypage',
@@ -51,7 +52,9 @@ const routes = [
   },
   {
     path: '/newslist',
-    component: NewsList
+    component: NewsList,
+    props: true,
+    meta: { requiresAuth: true } 
   },
   {
     path: '/newslistMM',
@@ -87,7 +90,8 @@ const routes = [
   },
   {
     path: '/newspage/:newsId',
-    component: NewsPage
+    component: NewsPage,
+    props: true
   },
   {
     path: '/login',
@@ -98,6 +102,7 @@ const routes = [
     component: JoinPage
   }
 ];
+
 
 const router = createRouter({
   history: createWebHistory(),

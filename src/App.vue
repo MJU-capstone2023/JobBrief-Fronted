@@ -21,12 +21,10 @@
     <router-view/>
   </div>
   <div>
-    <!-- <NewsPage/> -->
   </div>
 </template>
 
 <script>
-// import NewsPage from './components/NewsPage.vue'
 
 export default {
   methods: {
@@ -37,7 +35,6 @@ export default {
   
   name: 'App',
   components: {
-   //NewsPage///
   }
   
 }
