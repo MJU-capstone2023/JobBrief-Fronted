@@ -42,6 +42,7 @@
 
 <script>
 import axios from "axios";
+import authService from "../authService.js";
 
 export default {
   data() {
@@ -61,7 +62,7 @@ export default {
   methods: {
     fetchNews() {
       console.log(this.currentPage);
-      const apiUrl = `http://localhost:8082/api/news?job=all&page=${this.currentPage}`;
+      const apiUrl = `http://localhost:8082/api/news?job=design&page=${this.currentPage}`;
       console.log(apiUrl);
 
       axios

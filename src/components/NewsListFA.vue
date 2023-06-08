@@ -61,7 +61,7 @@ export default {
   methods: {
     fetchNews() {
       console.log(this.currentPage);
-      const apiUrl = `http://localhost:8082/api/news?job=all&page=${this.currentPage}`;
+      const apiUrl = `http://localhost:8082/api/news?job=finance-accounting&page=${this.currentPage}`;
       console.log(apiUrl);
 
       axios

@@ -61,11 +61,16 @@ export default {
   methods: {
     fetchNews() {
       console.log(this.currentPage);
-      const apiUrl = `http://localhost:8082/api/news?job=all&page=${this.currentPage}`;
+      const apiUrl = "http://localhost:8080/api/bookmark/all";
       console.log(apiUrl);
 
+      const accessToken = localStorage.getItem("accessToken");
       axios
-        .get(apiUrl)
+        .get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
         .then((response) => {
           this.newsList = response.data.newsList;
           console.log(this.newsList);
@@ -74,27 +79,6 @@ export default {
         .catch((error) => {
           console.error("API 오류:", error);
         });
-    },
-    goToPage(page) {
-      if (page !== this.currentPage) {
-        this.currentPage = page;
-        this.fetchNews();
-      }
-    },
-    prevPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-        this.fetchNews();
-      }
-    },
-    nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
-        this.fetchNews();
-      }
-    },
-    goToNews(newsId) {
-      this.$router.push(`/newspage/${newsId}`);
     },
   },
 };

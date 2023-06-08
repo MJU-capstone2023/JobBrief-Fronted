@@ -61,7 +61,7 @@ export default {
   methods: {
     fetchNews() {
       console.log(this.currentPage);
-      const apiUrl = `http://localhost:8082/api/news?job=all&page=${this.currentPage}`;
+      const apiUrl = "ttp://localhost:8080/api/recent-news";
       console.log(apiUrl);
 
       axios
