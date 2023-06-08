@@ -7,7 +7,7 @@
           <div class="card-body">
             <div class="form-group">
               <label for="username">아이디</label>
-              <input type="text" class="form-control" id="username" v-model="username">
+              <input type="text" class="form-control" id="userId" v-model="userId">
             </div>
             <div class="form-group">
               <label for="password">비밀번호</label>
@@ -24,31 +24,49 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
-      username: "",
+      userId: "",
       password: "",
+      showLoginAlert: false,
     };
   },
   methods: {
     login() {
-      // 로그인 로직
+      // API 호출
+      const apiUrl = 'http://localhost:8082/api/auth/login';
+      const requestData = {
+        userId: this.userId,
+        password: this.password
+      };
+
+      axios.post(apiUrl, requestData)
+        .then(response => {
+          localStorage.setItem('accessToken', response.data.accessToken);
+          alert('로그인 되었습니다');
+          this.$router.push('/newsList'); // NewsList 페이지로 라우팅
+        })
+        .catch(error => {
+          alert('로그인 실패했습니다. 아이디와 비밀번호를 확인하세요');
+          console.error('API 오류:', error);
+        });
     },
   },
 };
 </script>
+
 
 <style scoped>
 .card {
   margin-top: 50px;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
 }
-
 .card-header {
   background-color: #f5f5f5;
 }
-
 .card-footer {
   background-color: #f5f5f5;
 }

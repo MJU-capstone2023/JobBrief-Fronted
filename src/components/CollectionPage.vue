@@ -1,8 +1,8 @@
 <template>
     <div class="nav-bar">
-      <router-link class="button" to="/newslist">북마크</router-link>
-      <router-link class="button" to="/newslist">스크랩</router-link>
-      <router-link class="button" to="/newslist">최근 본 뉴스</router-link>
+      <router-link class="button" to="/newslistbookmark">북마크</router-link>
+      <router-link class="button" to="/newslistscrap">스크랩</router-link>
+      <router-link class="button" to="/newslistrecent">최근 본 뉴스</router-link>
       </div>
       <router-view/>
 </template>

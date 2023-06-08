@@ -1,19 +1,17 @@
 <template id="app">
   <div class="container">
-    <NewsPage/>
     <div>
-      <img src = "@/assets/배너.png" />
+      <img src="@/assets/배너.png" @click="goToNewsList"/>
     </div>
     <hr>
     <div class="nav-bar">
       <router-link class="button" to="/newslist">전체</router-link>
-      <router-link class="button" to="/newslist">생산/품질</router-link>
-      <router-link class="button" to="/newslist">IT개발</router-link>
-      <router-link class="button" to="/newslist">인사/총무</router-link>
-      <router-link class="button" to="/newslist">재무/회계/금융</router-link>
-      <router-link class="button" to="/newslist">전략/기획</router-link>
-      <router-link class="button" to="/newslist">영업/영업관리</router-link>
-      <router-link class="button" to="/newslist">마케팅/MD</router-link>
+      <router-link class="button" to="/newslistPQ">생산관리</router-link>
+      <router-link class="button" to="/newslistIT">IT개발</router-link>
+      <router-link class="button" to="/newslistHA">인사/총무</router-link>
+      <router-link class="button" to="/newslistFA">재무/회계/금융</router-link>
+      <router-link class="button" to="/newslistD">디자인</router-link>
+      <router-link class="button" to="/newslistMM">마케팅/MD/기획</router-link>
       <router-link class="button" to="/collection">컬렉션</router-link>
       <router-link class="button" to="/mypage">마이페이지</router-link>
       <router-link class="button" to="/login">로그인</router-link>
@@ -22,12 +20,24 @@
     <hr>
     <router-view/>
   </div>
+  <div>
+    <!-- <NewsPage/> -->
+  </div>
 </template>
 
 <script>
+// import NewsPage from './components/NewsPage.vue'
+
 export default {
+  methods: {
+    goToNewsList() {
+      this.$router.push('/newslist');
+    },
+  },
+  
   name: 'App',
   components: {
+   //NewsPage///
   }
   
 }

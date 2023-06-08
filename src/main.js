@@ -11,3 +11,4 @@ app.use(router)
 app.config.globalProperties.$http = axios
 
 app.mount('#app')
+Vue.prototype.$axios = axios

@@ -28,63 +28,59 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 
 export default {
   data() {
     return {
+      isActiveIndex: null,
       newsList: [],
       currentPage: 1,
-      totalPages: 0,
-      pageSize: 10, // 페이지당 아이템 수
+      itemsPerPage: 10
     };
   },
   mounted() {
-    this.fetchNews();
+    this.fetchNewsList(); // 컴포넌트가 마운트되면 뉴스 목록을 가져옵니다.
   },
   methods: {
-    fetchNews() {
-      const apiUrl = `http://localhost:8082/api/news?job=all&page=${this.currentPage}`;
-
-      axios.get(apiUrl)
+    fetchNewsList() {
+      axios.get('http://localhost:8082/api/recent-news')
         .then(response => {
           this.newsList = response.data.newsList;
-          this.totalPages = response.data.totalPages;
+          this.currentPage = response.data.currentPage; 
         })
         .catch(error => {
-          console.error('API 오류:', error);
+          console.error(error);
         });
     },
-    goToPage(page) {
-      if (page !== this.currentPage) {
-        this.currentPage = page;
-        this.fetchNews();
-      }
+    goToNews(newsId) {
+      // 뉴스 페이지로 이동
+      this.$router.push(`/newspage/${newsId}`);
     },
     prevPage() {
       if (this.currentPage > 1) {
         this.currentPage--;
-        this.fetchNews();
       }
     },
     nextPage() {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
-        this.fetchNews();
       }
     },
-    goToNews(newsId) {
-      // 뉴스 상세 페이지로 이동하는 로직 추가
-    },
+    goToPage(page) {
+      this.currentPage = page;
+    }
   },
   computed: {
     displayedNews() {
-      // 현재 페이지에 해당하는 뉴스 아이템을 반환하는 computed 속성 추가
-      const startIndex = (this.currentPage - 1) * this.pageSize;
-      const endIndex = startIndex + this.pageSize;
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
       return this.newsList.slice(startIndex, endIndex);
     },
-  },
+    totalPages() {
+      return Math.ceil(this.newsList.length / this.itemsPerPage);
+    }
+  }
 };
 </script>
 

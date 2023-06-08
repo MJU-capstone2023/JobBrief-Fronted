@@ -35,7 +35,7 @@ export default {
     return {
       isActiveIndex: null,
       newsList: [],
-      currentPage: 1,
+      page: 1,
       itemsPerPage: 10
     };
   },
@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     fetchNewsList() {
-      axios.get('http://localhost:8082/api/news?job=all')
+      axios.get('http://localhost:8080/api/news?job=all&page=3')
         .then(response => {
           this.newsList = response.data.newsList;
           this.currentPage = response.data.currentPage; 

@@ -1,32 +1,50 @@
 <template>
   <div class="container my-5">
-    <h1>{{ article.title }}</h1>
-    <hr>
-    <p class="text-muted">{{ article.author }} - {{ article.published }}</p>
-    <hr>
-    <div v-html="article.content"></div>
-  </div>
+  <h1>{{ article.title }}</h1>
+  <hr>
+  <p class="text-muted">{{ article.reporter }} - {{ article.pub_date }}</p>
+  <hr>
+  <div>{{ article.content }}</div>
   <div>
-    <textarea v-model="comment"></textarea>
+    <h5>Keywords:</h5>
+    <ul>
+      <span v-for="(keywords, index) in article.keywords" :key="index">{{ keywords.keywordName }}</span>
+    </ul>
   </div>
-  <div>
-    <button @click="$emit('save')">저장</button>
-  </div>
+</div>
+
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
+  methods: {
+
+  },
+  
   data() {
+    
     return {
-      article: {
-        title: '샘플 기사 제목',
-        author: '홍길동',
-        published: '2023-05-10',
-        content: '<p>샘플 기사 내용</p>'
-      }        
-    }
-  }
-}
+      article: {},
+    };
+  },
+  mounted() {
+    this.fetchArticle();
+  },
+  methods: {
+    fetchArticle() {
+      axios
+        .get(`http://localhost:8082/api/news/${this.newsId}`) // API 엔드포인트를 지정합니다.
+        .then(response => {
+          this.article = response.data; // 응답 데이터를 기사 데이터에 저장합니다.
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -46,4 +64,14 @@ img {
 .container {
   max-width: 800px;
 }
+ul span {
+  display: inline-block;
+  margin-right: 5px;
+  padding: 5px 10px;
+  background-color: #f2f2f2;
+  color: #333;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
 </style>
