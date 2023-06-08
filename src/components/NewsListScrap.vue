@@ -1,4 +1,10 @@
 <template>
+   <div class="nav-bar">
+      <router-link class="button" to="/newslistbookmark">북마크</router-link>
+      <router-link class="button" to="/newslistscrap">스크랩</router-link>
+      <router-link class="button" to="/newslistrecent">최근 본 뉴스</router-link>
+  </div>
+
   <div class="my-list-group">
     <div
       v-for="(newsItem, index) in this.newsList"
@@ -61,13 +67,18 @@ export default {
   methods: {
     fetchNews() {
       console.log(this.currentPage);
-      const apiUrl = `http://localhost:8082/api/scrap/all&page=${this.currentPage}`;
+      const apiUrl = `http://localhost:8082/api/scrap/all`;
       console.log(apiUrl);
+      const accessToken = localStorage.getItem("accessToken");
 
       axios
-        .get(apiUrl)
+        .get(apiUrl,{
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          }
+        })
         .then((response) => {
-          this.newsList = response.data.newsList;
+          this.newsList = response.data;
           console.log(this.newsList);
           this.totalPages = response.data.totalPages;
         })
