@@ -21,7 +21,6 @@
       <button v-if="!editing" @click="startEditing" class="btn btn-primary">수정시작</button>
       <button v-else @click="finishEditing" class="btn btn-primary">수정완료</button>
     </div>
-
   </div>
 </template>
 
@@ -36,27 +35,21 @@ export default {
     };
   },
 
-  
   mounted() {
     this.fetchUserData();
-
-
   },
 
   methods: {
     fetchUserData() {
-<<<<<<< HEAD
       const apiUrl = "http://localhost:8082/api/member/info";
-=======
-      const apiUrl = "http://localhost:8080/api/member/info";
->>>>>>> 6540f6e2bd75ff516257be76b03c9aebd7c8722d
       const accessToken = localStorage.getItem("accessToken");
+
       axios
-      .get(apiUrl,{
-        headers: {
+        .get(apiUrl, {
+          headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-      })
+        })
         .then(response => {
           this.userInfo = response.data;
           console.log(this.userInfo);
@@ -65,84 +58,45 @@ export default {
           console.error(error);
         });
     },
-<<<<<<< HEAD
 
-    
-  saveUserData() {
-    const apiUrl = 'http://localhost:8082/api/member/info';
-    const accessToken = localStorage.getItem("accessToken");
-
-    const formData = new FormData();
-    if (this.userInfo.name) {
-      formData.append("name", this.userInfo.name);
-    }
-    if (this.userInfo.password) {
-      formData.append("password", this.userInfo.password);
-    }
-    if (this.userInfo.phoneNumber) {
-      formData.append("phoneNumber", this.userInfo.phoneNumber);
-    }
-    if (this.userInfo.email) {
-      formData.append("email", this.userInfo.email);
-    }
-=======
     saveUserData() {
-      const apiUrl = 'http://localhost:8080/api/member/info';
+      const apiUrl = 'http://localhost:8082/api/member/info';
       const accessToken = localStorage.getItem("accessToken");
 
-      console.log(accessToken);
-      
+      const requestData = {
+        id: this.userInfo.id,
+        userId: this.userInfo.userId,
+        name: this.userInfo.name,
+        password: this.userInfo.password,
+        phoneNumber: this.userInfo.phoneNumber,
+        email: this.userInfo.email,
+      };
 
-      const formData = new FormData();
-      formData.append("id", this.userInfo.id);
-      formData.append("userId", this.userInfo.userId);
-      formData.append("name", this.userInfo.name);
-      formData.append("password", this.userInfo.password);
-      formData.append("phoneNumber", this.userInfo.phoneNumber);
-      formData.append("email", this.userInfo.email);
+      axios
+        .post(apiUrl, requestData, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json', // 추가: 요청 헤더에 콘텐츠 타입 설정
+          },
+        })
+        .then(response => {
+          console.log('데이터 저장 성공');
+        })
+        .catch(error => {
+          console.error('데이터 저장 실패:', error);
+        });
+    },
 
-      axios.post(apiUrl, formData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then(response => {
-        console.log('데이터 저장 성공');
-      })
-      .catch(error => {
-        console.error('데이터 저장 실패:', error);
-      });
-    }
-,
     startEditing() {
       this.editing = true;
     },
->>>>>>> 6540f6e2bd75ff516257be76b03c9aebd7c8722d
 
-    axios
-      .post(apiUrl, formData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        console.log('데이터 저장 성공'); 
-      })
-      .catch((error) => {
-        console.error('데이터 저장 실패:', error);  
-      });
+    finishEditing() {
+      this.editing = false;
+      this.saveUserData();
+    },
   }
-  ,
-      startEditing() {
-        this.editing = true;
-      },
-
-      finishEditing() {
-        this.editing = false;
-        this.saveUserData();
-      },
-    }
-  };
+};
 </script>
 
 <style>
