@@ -36,6 +36,7 @@ export default {
     };
   },
 
+  
   mounted() {
     this.fetchUserData();
 
@@ -44,7 +45,11 @@ export default {
 
   methods: {
     fetchUserData() {
+<<<<<<< HEAD
+      const apiUrl = "http://localhost:8082/api/member/info";
+=======
       const apiUrl = "http://localhost:8080/api/member/info";
+>>>>>>> 6540f6e2bd75ff516257be76b03c9aebd7c8722d
       const accessToken = localStorage.getItem("accessToken");
       axios
       .get(apiUrl,{
@@ -60,6 +65,27 @@ export default {
           console.error(error);
         });
     },
+<<<<<<< HEAD
+
+    
+  saveUserData() {
+    const apiUrl = 'http://localhost:8082/api/member/info';
+    const accessToken = localStorage.getItem("accessToken");
+
+    const formData = new FormData();
+    if (this.userInfo.name) {
+      formData.append("name", this.userInfo.name);
+    }
+    if (this.userInfo.password) {
+      formData.append("password", this.userInfo.password);
+    }
+    if (this.userInfo.phoneNumber) {
+      formData.append("phoneNumber", this.userInfo.phoneNumber);
+    }
+    if (this.userInfo.email) {
+      formData.append("email", this.userInfo.email);
+    }
+=======
     saveUserData() {
       const apiUrl = 'http://localhost:8080/api/member/info';
       const accessToken = localStorage.getItem("accessToken");
@@ -91,13 +117,32 @@ export default {
     startEditing() {
       this.editing = true;
     },
+>>>>>>> 6540f6e2bd75ff516257be76b03c9aebd7c8722d
 
-    finishEditing() {
-      this.editing = false;
-      this.saveUserData();
-    },
+    axios
+      .post(apiUrl, formData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
+        console.log('데이터 저장 성공'); 
+      })
+      .catch((error) => {
+        console.error('데이터 저장 실패:', error);  
+      });
   }
-};
+  ,
+      startEditing() {
+        this.editing = true;
+      },
+
+      finishEditing() {
+        this.editing = false;
+        this.saveUserData();
+      },
+    }
+  };
 </script>
 
 <style>
