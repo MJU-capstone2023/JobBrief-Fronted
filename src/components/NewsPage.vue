@@ -52,32 +52,56 @@ export default {
   },
 
   methods: {
-    fetchArticle() {
-      const apiUrl = this.isAuthenticated ? `http://localhost:8082/api/news/member/${this.newsId}` : `http://localhost:8082/api/news/${this.newsId}`;
+  fetchArticle() {
+    const accessToken = localStorage.getItem("accessToken");
+    const apiUrlA = `http://localhost:8082/api/news/member/${this.newsId}`;
+    const apiUrl = `http://localhost:8082/api/news/${this.newsId}`;
+    const apiUrlToUse = this.isAuthenticated ? apiUrlA : apiUrl;
 
-      axios
-        .get(apiUrl)
-        .then(response => {
-          this.article = response.data;
-          console.log(this.article);
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    },
+    axios
+      .get(apiUrlToUse, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(response => {
+        this.article = response.data;
+        console.log(this.article);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  },
+  saveScrapOpinion() {
+    const accessToken = localStorage.getItem("accessToken");
+    const scrapOpinionApiUrl = `http://localhost:8082/api/scrap-opinion/${this.newsId}`;
 
-    saveScrapOpinion() {
-      // 스크랩 의견 저장 로직 구현
-    },
+    // 요청 본문에 opinion 값을 추가하여 전송합니다.
+    const requestData = {
+      newsId: this.article.id,
+      opinion: this.scrap_opinion
+    };
 
-    toggleBookmark() {
-      if (this.isBookmarked) {
-        this.removeBookmark();
-      } else {
-        this.addBookmark();
-      }
-    },
-    
+    axios
+      .post(
+        scrapOpinionApiUrl,
+        requestData,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        }
+      )
+      .then(response => {
+        console.log("스크랩 의견 저장 성공");
+        // 성공적으로 저장되었을 때의 동작을 수행하세요
+      })
+      .catch(error => {
+        console.error("스크랩 의견 저장 실패:", error);
+        // 저장 실패 시의 동작을 수행하세요
+      });
+  },
+
     addBookmark() {
       const bookmarkApiUrl = "http://localhost:8082/api/bookmark/";
       const accessToken = localStorage.getItem('accessToken');
