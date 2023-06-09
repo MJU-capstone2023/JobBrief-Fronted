@@ -15,15 +15,25 @@
   </div>
 
   <div v-if="isAuthenticated">
-    <textarea v-model="scrap_opinion"></textarea>
-    <button @click="saveScrapOpinion">Save Scrap Opinion</button>
-    <button @click="isBookmarked ? removeBookmark() : addBookmark()" :class="{ 'bookmarked': isBookmarked }">
-    {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
-    </button>
+    <!-- <textarea v-model="scrap_opinion"></textarea> -->
+    <div style="display:flex" class="container">
+      <b-form-input v-model="scrap_opinion" placeholder="Enter your opinion"></b-form-input>
+      <b-button variant="outline-primary"  @click="saveScrapOpinion">Save Scrap Opinion</b-button>
+      <!-- <button @click="saveScrapOpinion">Save Scrap Opinion</button> -->
+      <b-button variant="outline-primary"  @click="isBookmarked ? removeBookmark() : addBookmark()" :class="{ 'bookmarked': isBookmarked }">
+      {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
+      </b-button>
+
+      <!-- <button @click="isBookmarked ? removeBookmark() : addBookmark()" :class="{ 'bookmarked': isBookmarked }">
+      {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
+      </button> -->
+    </div>
+
 </div>
 </template>
 
 <script>
+
 import axios from "axios";
 
 export default {
@@ -64,6 +74,7 @@ export default {
       .get(apiUrl)
       .then(response => {
         this.article = response.data;
+
         console.log(this.article);
       })
       .catch(error => {
@@ -73,17 +84,15 @@ export default {
   saveScrapOpinion() {
     const accessToken = localStorage.getItem("accessToken");
     const scrapOpinionApiUrl = `http://localhost:8082/api/scrap/new/${this.newsId}`;
-    console.log( this.scrap_opinion );
-    console.log( this.article.id );
-    console.log(scrapOpinionApiUrl);
-
-
-
 
     // 요청 본문에 opinion 값을 추가하여 전송합니다.
     const requestData = {
       opinion: this.scrap_opinion // 수정: scrap_opinion을 opinion으로 변경
     };
+
+    console.log(accessToken);
+    console.log(scrapOpinionApiUrl);
+    console.log(requestData);
 
     axios
       .post(scrapOpinionApiUrl, requestData, {
@@ -100,11 +109,10 @@ export default {
       });
   },
 
- 
-
     addBookmark() {
       const bookmarkApiUrl = "http://localhost:8082/api/bookmark/";
       const accessToken = localStorage.getItem('accessToken');
+      
 
       axios
         .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
