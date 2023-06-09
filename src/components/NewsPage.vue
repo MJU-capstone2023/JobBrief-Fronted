@@ -16,10 +16,13 @@
   <div v-if="isAuthenticated">
   <div style="display:flex" class="container">
     <b-form-input v-model="scrap_opinion" placeholder="Enter your opinion" class='input-box' v-if="!article.scrap_opinion"></b-form-input>
-    <div v-else>{{ article.scrap_opinion }}</div>
-    <b-button variant="outline-primary"  @click="saveScrapOpinion">Save Scrap Opinion</b-button>
-    <b-button variant="outline-primary"  @click="isBookmarked ? removeBookmark() : addBookmark()" :class="{ 'bookmarked': isBookmarked }">
-      {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
+    <div v-else>
+      <b-form-input class='input-box' type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrap_opinion" @input="scrap_opinion = $event.target.value">
+      </b-form-input>
+    </div>
+    <b-button class='button1' variant="outline-primary"  @click="saveScrapOpinion">Save Scrap Opinion</b-button>
+    <b-button variant="outline-primary"  @click="isBookmarked ? removeBookmark() : addBookmark()" 
+    :class="{ 'bookmarked': isBookmarked}"> {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
     </b-button>
   </div>
 </div>
@@ -128,8 +131,6 @@ export default {
     removeBookmark() {
       const bookmarkApiUrl = "http://localhost:8082/api/bookmark/";
       const accessToken = localStorage.getItem('accessToken');
-      
-
       axios
         .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
         .then(response => {
@@ -176,7 +177,13 @@ ul span {
 }
 
 .input-box {
-  min-width: 100%;
+ width: 480px;
+
+}
+
+.button1{
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .scrap-opinion {
@@ -187,4 +194,6 @@ ul span {
   display: flex;
   align-items: center;
 }
+
+
 </style>
