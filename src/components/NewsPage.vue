@@ -13,22 +13,15 @@
       </ul>
     </div>
   </div>
-
   <div v-if="isAuthenticated">
-    <!-- <textarea v-model="scrap_opinion"></textarea> -->
-    <div style="display:flex" class="container">
-      <b-form-input v-model="scrap_opinion" placeholder="Enter your opinion"></b-form-input>
-      <b-button variant="outline-primary"  @click="saveScrapOpinion">Save Scrap Opinion</b-button>
-      <!-- <button @click="saveScrapOpinion">Save Scrap Opinion</button> -->
-      <b-button variant="outline-primary"  @click="isBookmarked ? removeBookmark() : addBookmark()" :class="{ 'bookmarked': isBookmarked }">
+  <div style="display:flex" class="container">
+    <b-form-input v-model="scrap_opinion" placeholder="Enter your opinion" class='input-box' v-if="!article.scrap_opinion"></b-form-input>
+    <div v-else>{{ article.scrap_opinion }}</div>
+    <b-button variant="outline-primary"  @click="saveScrapOpinion">Save Scrap Opinion</b-button>
+    <b-button variant="outline-primary"  @click="isBookmarked ? removeBookmark() : addBookmark()" :class="{ 'bookmarked': isBookmarked }">
       {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
-      </b-button>
-
-      <!-- <button @click="isBookmarked ? removeBookmark() : addBookmark()" :class="{ 'bookmarked': isBookmarked }">
-      {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
-      </button> -->
-    </div>
-
+    </b-button>
+  </div>
 </div>
 </template>
 
@@ -52,14 +45,16 @@ export default {
     };
   },
 
-  computed: {
-    isAuthenticated() {
-      return !!localStorage.getItem('accessToken');
-    }
-  },
-
   mounted() {
     this.fetchArticle();
+  },
+
+  computed: {
+    isAuthenticated() {
+      const accessToken = localStorage.getItem('accessToken');
+      console.log(accessToken);
+      return !!accessToken;
+    }
   },
 
   methods: {
@@ -71,23 +66,27 @@ export default {
     console.log(apiUrlToUse);
 
     axios
-      .get(apiUrl)
-      .then(response => {
+      .get(apiUrlToUse, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then((response) => {
         this.article = response.data;
-
         console.log(this.article);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
   },
+
   saveScrapOpinion() {
     const accessToken = localStorage.getItem("accessToken");
     const scrapOpinionApiUrl = `http://localhost:8082/api/scrap/new/${this.newsId}`;
 
     // 요청 본문에 opinion 값을 추가하여 전송합니다.
     const requestData = {
-      opinion: this.scrap_opinion // 수정: scrap_opinion을 opinion으로 변경
+      opinion: this.scrap_opinion 
     };
 
     console.log(accessToken);
@@ -98,21 +97,21 @@ export default {
       .post(scrapOpinionApiUrl, requestData, {
         headers: {
             Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json', // 추가: 요청 헤더에 콘텐츠 타입 설정
+            'Content-Type': 'application/json', 
           },
       })
       .then(response => {
         console.log('데이터 저장 성공');
       })
       .catch(error => {
-        console.error('데이터 저장 실패:', error);
+        next('/login');
+        alert('해당 기능에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
       });
   },
 
     addBookmark() {
       const bookmarkApiUrl = "http://localhost:8082/api/bookmark/";
       const accessToken = localStorage.getItem('accessToken');
-      
 
       axios
         .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
@@ -121,27 +120,31 @@ export default {
           console.log("북마크 추가 완료");
         })
         .catch(error => {
-          console.error("북마크 추가 오류:", error);
+          next('/login');
+          alert('해당 기능에 페이지에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
         });
     },
 
     removeBookmark() {
       const bookmarkApiUrl = "http://localhost:8082/api/bookmark/";
       const accessToken = localStorage.getItem('accessToken');
+      
 
       axios
-        .delete(bookmarkApiUrl + this.article.id, { headers: { Authorization: `Bearer ${accessToken}` } })
+        .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
         .then(response => {
-          this.isBookmarked = false;
+          this.isBookmarked = true;
           console.log("북마크 삭제 완료");
         })
         .catch(error => {
-          console.error("북마크 삭제 오류:", error);
+          next('/login');
+          alert('해당 기능에 페이지에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
         });
     },
   },
 };
 </script>
+
 
 
 <style scoped>
@@ -161,6 +164,7 @@ img {
 .container {
   max-width: 800px;
 }
+
 ul span {
   display: inline-block;
   margin-right: 5px;
@@ -171,4 +175,16 @@ ul span {
   font-size: 0.9rem;
 }
 
+.input-box {
+  min-width: 100%;
+}
+
+.scrap-opinion {
+  margin-right: 10px;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+}
 </style>
