@@ -6,6 +6,9 @@
     <hr>
     <div>{{ article.content }}</div>
     <br>
+    <h5>뉴스 요약</h5>
+    <div>{{ article.summary }}</div> 
+    <br>
     <div style="display: flex;">
       <h5>Keywords:</h5>
       <ul>
@@ -13,6 +16,7 @@
       </ul>
     </div>
   </div>
+
   <div v-if="isAuthenticated">
     <div style="display:flex" class="container">
       <b-form-input v-model="scrap_opinion" placeholder="Enter your opinion" class="input-box" v-if="!article.scrap_opinion"></b-form-input>
@@ -61,7 +65,7 @@ export default {
   },
 
   methods: {
-  fetchArticle() {
+ fetchArticle() {
     const accessToken = localStorage.getItem("accessToken");
     console.log(accessToken);
     const apiUrlA = `http://localhost:8082/api/news/member/${this.newsId}`;
