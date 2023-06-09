@@ -46,8 +46,8 @@ export default {
         .then(response => {
           const accessToken = response.data.accessToken;
           localStorage.setItem('accessToken', accessToken);
-          alert('로그인 되었습니다');
-          this.$router.push('/newsList');
+          alert('로그인 되었습니다');          
+          this.$router.push('/newslist');
         })
         .catch(error => {
           alert('로그인 실패했습니다. 아이디와 비밀번호를 확인하세요');

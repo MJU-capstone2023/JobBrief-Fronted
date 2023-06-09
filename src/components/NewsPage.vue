@@ -16,9 +16,9 @@
   <div v-if="isAuthenticated">
     <textarea v-model="scrap_opinion"></textarea>
     <button @click="saveScrapOpinion">Save Scrap Opinion</button>
-    <button @click="toggleBookmark" :class="{ 'bookmarked': isBookmarked }">
-      {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
-    </button>
+    <button @click="isBookmarked ? removeBookmark() : addBookmark()" :class="{ 'bookmarked': isBookmarked }">
+    {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
+</button>
   </div>
 </template>
 
@@ -74,33 +74,30 @@ export default {
   },
   saveScrapOpinion() {
     const accessToken = localStorage.getItem("accessToken");
-    const scrapOpinionApiUrl = `http://localhost:8082/api/scrap-opinion/${this.newsId}`;
+    const scrapOpinionApiUrl = `http://localhost:8082/api/scrap/new/${this.newsId}`;
 
     // 요청 본문에 opinion 값을 추가하여 전송합니다.
     const requestData = {
       newsId: this.article.id,
-      opinion: this.scrap_opinion
+      opinion: this.scrap_opinion // 수정: scrap_opinion을 opinion으로 변경
     };
 
     axios
-      .post(
-        scrapOpinionApiUrl,
-        requestData,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
-        }
-      )
+      .post(scrapOpinionApiUrl, requestData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json', // 추가: 요청 헤더에 콘텐츠 타입 설정
+        },
+      })
       .then(response => {
-        console.log("스크랩 의견 저장 성공");
-        // 성공적으로 저장되었을 때의 동작을 수행하세요
+        console.log('데이터 저장 성공');
       })
       .catch(error => {
-        console.error("스크랩 의견 저장 실패:", error);
-        // 저장 실패 시의 동작을 수행하세요
+        console.error('데이터 저장 실패:', error);
       });
   },
+
+ 
 
     addBookmark() {
       const bookmarkApiUrl = "http://localhost:8082/api/bookmark/";

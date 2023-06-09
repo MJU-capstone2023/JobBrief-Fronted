@@ -66,6 +66,7 @@ export default {
         .get(apiUrl, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
           },
         })
         .then((response) => {
