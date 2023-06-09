@@ -14,18 +14,18 @@
     </div>
   </div>
   <div v-if="isAuthenticated">
-  <div style="display:flex" class="container">
-    <b-form-input v-model="scrap_opinion" placeholder="Enter your opinion" class='input-box' v-if="!article.scrap_opinion"></b-form-input>
-    <div v-else>
-      <b-form-input class='input-box' type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrap_opinion" @input="scrap_opinion = $event.target.value">
-      </b-form-input>
+    <div style="display:flex" class="container">
+      <b-form-input v-model="scrap_opinion" placeholder="Enter your opinion" class="input-box" v-if="!article.scrap_opinion"></b-form-input>
+      <div v-else>
+        <b-form-input class="input-box" type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrap_opinion" @input="scrap_opinion = $event.target.value">
+        </b-form-input>
+      </div>
+      <b-button class="button1" variant="outline-primary" @click="saveScrapOpinion">Save Scrap Opinion</b-button>
+      <b-button variant="outline-primary" @click="isBookmarked ? removeBookmark() : addBookmark()" :class="{ 'bookmarked': isBookmarked }">
+        {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
+      </b-button>
     </div>
-    <b-button class='button1' variant="outline-primary"  @click="saveScrapOpinion">Save Scrap Opinion</b-button>
-    <b-button variant="outline-primary"  @click="isBookmarked ? removeBookmark() : addBookmark()" 
-    :class="{ 'bookmarked': isBookmarked}"> {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
-    </b-button>
   </div>
-</div>
 </template>
 
 <script>
@@ -104,7 +104,8 @@ export default {
           },
       })
       .then(response => {
-        console.log('데이터 저장 성공');
+          alert('저장되었습니다!');
+        
       })
       .catch(error => {
         next('/login');
@@ -134,7 +135,7 @@ export default {
       axios
         .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
         .then(response => {
-          this.isBookmarked = true;
+          this.isBookmarked = false;
           console.log("북마크 삭제 완료");
         })
         .catch(error => {
@@ -145,8 +146,6 @@ export default {
   },
 };
 </script>
-
-
 
 <style scoped>
 h1 {
@@ -177,11 +176,10 @@ ul span {
 }
 
 .input-box {
- width: 480px;
-
+  width: 480px;
 }
 
-.button1{
+.button1 {
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -189,11 +187,14 @@ ul span {
 .scrap-opinion {
   margin-right: 10px;
 }
-
+s
 .button-container {
   display: flex;
   align-items: center;
 }
 
-
+.bookmarked {
+  background-color: #85b0fa !important;
+  color: #ffffff !important;
+}
 </style>
