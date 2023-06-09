@@ -47,8 +47,7 @@ const routes = [
   {
     path: '/newslist',
     component: NewsList,
-    props: true,
-    meta: { requiresAuth: true } 
+    props: true
   },
   {
     path: '/newslistMM',
