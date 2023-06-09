@@ -1,35 +1,34 @@
 <template>
-    <div class="container my-5">
-      <h1>{{ article.title }}</h1>
-      <hr>
-      <p class="text-muted">{{ article.reporter }} - {{ article.pub_date }}</p>
-      <hr>
-      <div>{{ article.content }}</div>
-      <br>
-      <div style="display: flex;">
-        <h5>Keywords:</h5>
-        <ul>
-          <span v-for="(keyword, index) in article.keywords" :key="index">{{ keyword.keywordName }}</span>
-        </ul>
-      </div>
+  <div class="container my-5">
+    <h1>{{ article.title }}</h1>
+    <hr>
+    <p class="text-muted">{{ article.reporter }} - {{ article.pub_date }}</p>
+    <hr>
+    <div>{{ article.content }}</div>
+    <br>
+    <div style="display: flex;">
+      <h5>Keywords:</h5>
+      <ul>
+        <span v-for="(keyword, index) in article.keywords" :key="index">{{ keyword.keywordName }}</span>
+      </ul>
     </div>
-    <div v-if="isAuthenticated">
+  </div>
+  <div v-if="isAuthenticated">
     <div style="display:flex" class="container">
-      <b-form-input v-model="scrap_opinion" placeholder="Enter your opinion" class='input-box' v-if="!article.scrap_opinion"></b-form-input>
+      <b-form-input v-model="scrap_opinion" placeholder="Enter your opinion" class="input-box" v-if="!article.scrap_opinion"></b-form-input>
       <div v-else>
-      <b-form-input class='input-box' type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrap_opinion" @input="scrap_opinion = $event.target.value">
-      </b-form-input>
+        <b-form-input class="input-box" type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrap_opinion" @input="scrap_opinion = $event.target.value">
+        </b-form-input>
       </div>
-      <b-button variant="outline-primary"  @click="saveScrapOpinion">Save Scrap Opinion</b-button>
-      <b-button variant="outline-primary"  @click="isBookmarked ? removeBookmark() : addBookmark()" :class="{ 'bookmarked': isBookmarked }">
+      <b-button class="button1" variant="outline-primary" @click="saveScrapOpinion">Save Scrap Opinion</b-button>
+      <b-button variant="outline-primary" @click="isBookmarked ? removeBookmark() : addBookmark()" :class="{ 'bookmarked': isBookmarked }">
         {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
       </b-button>
     </div>
   </div>
+</template>
   
-  </template>
-  
-  <script>
+<script>
     
     import axios from "axios";
     
@@ -137,7 +136,7 @@
             axios
             .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
             .then(response => {
-                this.isBookmarked = true;
+                this.isBookmarked = false;
                 console.log("북마크 삭제 완료");
             })
             .catch(error => {
@@ -163,9 +162,11 @@
   img {
     max-width: 100%;
   }
+  
   .container {
     max-width: 800px;
   }
+  
   ul span {
     display: inline-block;
     margin-right: 5px;
@@ -176,8 +177,26 @@
     font-size: 0.9rem;
   }
   
-  .input-box{
-    min-width: 100%;
+  .input-box {
+    width: 480px;
+  }
+  
+  .button1 {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  
+  .scrap-opinion {
+    margin-right: 10px;
+  }
+  
+  .button-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .bookmarked {
+    background-color: #85b0fa !important;
+    color: #ffffff !important;
   }
   </style>
-  

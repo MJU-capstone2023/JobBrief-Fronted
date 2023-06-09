@@ -52,6 +52,9 @@ export default {
           console.error("API 오류:", error);
         });
     },
+    goToNews(newsId) {
+      this.$router.push(`/newspage/${newsId}`);
+    },
   },
 };
 </script>
