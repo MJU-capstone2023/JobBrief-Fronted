@@ -16,7 +16,10 @@
     <div v-if="isAuthenticated">
     <div style="display:flex" class="container">
       <b-form-input v-model="scrap_opinion" placeholder="Enter your opinion" class='input-box' v-if="!article.scrap_opinion"></b-form-input>
-      <div v-else>{{ article.scrap_opinion }}</div>
+      <div v-else>
+      <b-form-input class='input-box' type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrap_opinion" @input="scrap_opinion = $event.target.value">
+      </b-form-input>
+      </div>
       <b-button variant="outline-primary"  @click="saveScrapOpinion">Save Scrap Opinion</b-button>
       <b-button variant="outline-primary"  @click="isBookmarked ? removeBookmark() : addBookmark()" :class="{ 'bookmarked': isBookmarked }">
         {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
