@@ -97,7 +97,7 @@ export default {
       }
     },
     goToNews(newsId) {
-      this.$router.push(`/newspage/${newsId}`);
+      this.$router.push(`/newspagebook/${newsId}`);
     },
   },
 };
