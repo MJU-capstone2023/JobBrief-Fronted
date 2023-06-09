@@ -5,7 +5,8 @@
     <p class="text-muted">{{ article.reporter }} - {{ article.pub_date }}</p>
     <hr>
     <div>{{ article.content }}</div>
-    <div>
+    <br>
+    <div style="display: flex;">
       <h5>Keywords:</h5>
       <ul>
         <span v-for="(keyword, index) in article.keywords" :key="index">{{ keyword.keywordName }}</span>
@@ -18,8 +19,8 @@
     <button @click="saveScrapOpinion">Save Scrap Opinion</button>
     <button @click="isBookmarked ? removeBookmark() : addBookmark()" :class="{ 'bookmarked': isBookmarked }">
     {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
-</button>
-  </div>
+    </button>
+</div>
 </template>
 
 <script>
@@ -57,13 +58,10 @@ export default {
     const apiUrlA = `http://localhost:8082/api/news/member/${this.newsId}`;
     const apiUrl = `http://localhost:8082/api/news/${this.newsId}`;
     const apiUrlToUse = this.isAuthenticated ? apiUrlA : apiUrl;
+    console.log(apiUrlToUse);
 
     axios
-      .get(apiUrlToUse, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      .get(apiUrl)
       .then(response => {
         this.article = response.data;
         console.log(this.article);
@@ -75,19 +73,24 @@ export default {
   saveScrapOpinion() {
     const accessToken = localStorage.getItem("accessToken");
     const scrapOpinionApiUrl = `http://localhost:8082/api/scrap/new/${this.newsId}`;
+    console.log( this.scrap_opinion );
+    console.log( this.article.id );
+    console.log(scrapOpinionApiUrl);
+
+
+
 
     // 요청 본문에 opinion 값을 추가하여 전송합니다.
     const requestData = {
-      newsId: this.article.id,
       opinion: this.scrap_opinion // 수정: scrap_opinion을 opinion으로 변경
     };
 
     axios
       .post(scrapOpinionApiUrl, requestData, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json', // 추가: 요청 헤더에 콘텐츠 타입 설정
-        },
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json', // 추가: 요청 헤더에 콘텐츠 타입 설정
+          },
       })
       .then(response => {
         console.log('데이터 저장 성공');

@@ -78,8 +78,7 @@ export default {
           }
         })
         .then((response) => {
-          this.newsList = response.data;
-          console.log(this.newsList);
+          this.newsList = response.data.newsList;
           this.totalPages = response.data.totalPages;
         })
         .catch((error) => {
