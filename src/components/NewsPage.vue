@@ -63,12 +63,14 @@ export default {
   methods: {
   fetchArticle() {
     const accessToken = localStorage.getItem("accessToken");
+    console.log(accessToken);
     const apiUrlA = `http://localhost:8082/api/news/member/${this.newsId}`;
     const apiUrl = `http://localhost:8082/api/news/${this.newsId}`;
     const apiUrlToUse = this.isAuthenticated ? apiUrlA : apiUrl;
     console.log(apiUrlToUse);
 
-    axios
+    if (this.isAuthenticated ){
+      axios
       .get(apiUrlToUse, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -81,6 +83,18 @@ export default {
       .catch((error) => {
         console.error(error);
       });
+    } else{
+      axios
+      .get(apiUrlToUse, {
+      })
+      .then((response) => {
+        this.article = response.data;
+        console.log(this.article);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    }
   },
 
   saveScrapOpinion() {
