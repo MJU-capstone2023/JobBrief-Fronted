@@ -43,7 +43,23 @@ const routes = [
     path: '/collection',
     component: CollectionPage,
     beforeEnter: requireAuth,
+    children: [
+      {
+        path: '/collection/newslistbookmark',
+        component: NewsListBookmark,
+        beforeEnter: requireAuth
+      },
+      {
+        path: '/collection/newslistrecent',
+        component: NewsListRecent
+      },
+      {
+        path: '/collection/newslistscrap',
+        component: NewsListScrap
+      }
+    ]
   },
+  
   {
     path: '/newslist',
     component: NewsList,
