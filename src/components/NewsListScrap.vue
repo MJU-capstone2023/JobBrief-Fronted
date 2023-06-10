@@ -62,8 +62,7 @@ export default {
   methods: {
     fetchNews() {
       console.log(this.currentPage);
-     // const apiUrl = `http://localhost:8082/api/scrap/all&page=${this.currentPage}`;
-      const apiUrl = `http://localhost:8082/api/scrap/all`;
+      const apiUrl = `http://localhost:8082/api/scrap/all?page=${this.currentPage}`;
 
       console.log(apiUrl);
       const accessToken = localStorage.getItem("accessToken");
