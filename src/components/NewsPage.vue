@@ -12,7 +12,7 @@
     <div style="display: flex;">
       <h5>Keywords:</h5>
       <ul>
-        <span v-for="(keyword, index) in article.keywords" :key="index">{{ keyword.keywordName }}</span>
+        <span v-for="(keyword, index) in article.keywords" :key="index"  @click="searchKeyword(keyword.keywordName)">{{ keyword.keywordName }}</span>
       </ul>
     </div>
   </div>
@@ -161,6 +161,20 @@ export default {
           alert('해당 기능에 페이지에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
         });
     },
+  searchKeyword(keywordName) {
+    const apiUrl =  `http://localhost:8082/api/keyword/search?keyword=${keywordName}`
+    alert(`Clicked on keyword: ${keywordName}`);
+    axios
+        .get(apiUrl)
+        .then((response) => {
+          this.newsList = response.data;
+          console.log(this.newsList);
+        })
+        .catch((error) => {
+          console.error("API 오류:", error);
+        });
+  
+  }
   },
 };
 </script>
