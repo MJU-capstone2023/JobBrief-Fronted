@@ -204,9 +204,11 @@ export default {
         });
   },
   goToNews(newsId) {
-      console.log(newsId);
-      this.$router.push(`/newspage/${newsId}`);
-    }
+  console.log(newsId);
+  window.location.href = `/newspage/${newsId}`;
+}
+
+
   },
 };
 </script>
