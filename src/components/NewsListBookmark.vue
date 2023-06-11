@@ -58,9 +58,31 @@ export default {
     this.fetchNews();
   },
   
+  computed: {
+    visiblePages() {
+      const pageRange = Math.floor(this.pageSize / 2);
+      let startPage = this.currentPage - pageRange;
+      let endPage = this.currentPage + pageRange;
+
+      if (startPage <= 0) {
+        startPage = 1;
+        endPage = Math.min(this.totalPages, this.pageSize);
+      } else if (endPage > this.totalPages) {
+        endPage = this.totalPages;
+        startPage = Math.max(1, this.totalPages - this.pageSize + 1);
+      }
+
+      return Array(endPage - startPage + 1)
+        .fill()
+        .map((_, index) => startPage + index);
+    },
+  },
+
+  
   methods: {
     fetchNews() {
-      const apiUrl = "http://localhost:8082/api/bookmark/all";
+      const apiUrl = `http://localhost:8082/api/bookmark/all?page=${this.currentPage}`;
+
       const accessToken = localStorage.getItem("accessToken");
       axios
         .get(apiUrl, {
@@ -97,7 +119,7 @@ export default {
       }
     },
     goToNews(newsId) {
-      this.$router.push(`/newspagebook/${newsId}`);
+      this.$router.push(`/newspage/${newsId}`);
     },
   },
 };
@@ -143,8 +165,14 @@ export default {
     font-size: 0.875rem;
   }
 
-  .pagnation{
+  .pagination{
+    justify-content: center; 
+    align-items: center;
+  } 
+  .page-item{
     align-items: center;
   }
+
 </style>
+
 

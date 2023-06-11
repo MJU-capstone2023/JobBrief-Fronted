@@ -10,18 +10,17 @@
     <div>{{ article.summary }}</div> 
     <br>
     <div style="display: flex;">
-      <h5>Keywords:</h5>
+      <h5>키워드:</h5>
       <ul>
         <span v-for="(keyword, index) in article.keywords" :key="index"  @click="searchKeyword(keyword.keywordName)">{{ keyword.keywordName }}</span>
       </ul>
     </div>
   </div>
-
   <div v-if="isAuthenticated">
     <div style="display:flex" class="container">
-      <b-form-input v-model="scrap_opinion" placeholder="Enter your opinion" class="input-box" v-if="!article.scrap_opinion"></b-form-input>
-      <div v-else>g
-        <b-form-input class="input-box" type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrap_opinion">
+      <b-form-input v-model="scrapOpinion" placeholder="Enter your opinion"  class="input-box" v-if="!article.scrapOpinion"></b-form-input>
+      <div v-else>
+        <b-form-input class="input-box" type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrapOpinion">
         </b-form-input>
       </div>
       <b-button class="button1" variant="outline-primary" @click="saveScrapOpinion">Save Scrap Opinion</b-button>
@@ -57,6 +56,7 @@
 
   </template>
   
+
 
 <script>
 
