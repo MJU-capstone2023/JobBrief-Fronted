@@ -92,7 +92,6 @@ export default {
         .get(apiUrl)
         .then((response) => {
           this.newsList = response.data.newsList;
-          console.log(this.newsList);
           this.totalPages = response.data.totalPages;
         })
         .catch((error) => {

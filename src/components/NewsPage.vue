@@ -30,7 +30,33 @@
       </b-button>
     </div>
   </div>
-</template>
+
+    <!-- keyword NEWS  -->
+    <div v-if="this.keyword.length!=0" class="container my-5">
+      <h5>{{this.keyword}}</h5>
+      <hr/>
+      <div
+      v-for="(newsItem, index) in this.keywordnewsList"
+      :key="index"
+      class="my-list-group-item"
+      :class="{ active: isActiveIndex === index }"
+      @mouseenter="isActiveIndex = index"
+      @mouseleave="isActiveIndex = null"
+      @click="goToNews(newsItem.id)"
+    >
+      <div class="my-list-group-item-header">
+        <span class="my-list-group-item-title" style="font-weight: bold">{{ newsItem.title }}</span>
+      </div>
+      <span class="my-list-group-item-content">
+        {{ newsItem.summary }}
+      </span>
+    </div>
+    <hr />
+  </div>
+
+
+  </template>
+  
 
 <script>
 
@@ -48,7 +74,9 @@ export default {
     return {
       article: {},
       scrap_opinion: "",
-      isBookmarked: false
+      isBookmarked: false,
+      keywordnewsList: [],
+      keyword: ''
     };
   },
 
@@ -163,18 +191,22 @@ export default {
     },
   searchKeyword(keywordName) {
     const apiUrl =  `http://localhost:8082/api/keyword/search?keyword=${keywordName}`
-    alert(`Clicked on keyword: ${keywordName}`);
+    // alert(`Clicked on keyword: ${keywordName}`);
+    this.keyword = keywordName;
     axios
         .get(apiUrl)
         .then((response) => {
-          this.newsList = response.data;
-          console.log(this.newsList);
+          this.keywordnewsList = response.data.newsList;
+          console.log( this.keywordnewsList );
         })
         .catch((error) => {
           console.error("API 오류:", error);
         });
-  
-  }
+  },
+  goToNews(newsId) {
+      console.log(newsId);
+      this.$router.push(`/newspage/${newsId}`);
+    }
   },
 };
 </script>
