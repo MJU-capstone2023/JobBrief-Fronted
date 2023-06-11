@@ -18,19 +18,18 @@
   </div>
   <div v-if="isAuthenticated">
     <div style="display:flex" class="container">
-      <b-form-input v-model="scrapOpinion" placeholder="Enter your opinion"  class="input-box" v-if="!article.scrapOpinion"></b-form-input>
+      <b-form-input v-model="scrapOpinion" placeholder="Enter your opinion"  class="input-box" v-if="!article.scrap_opinion"></b-form-input>
       <div v-else>
-        <b-form-input class="input-box" type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrapOpinion">
+        <b-form-input class="input-box" type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="scrapOpinion">
         </b-form-input>
       </div>
       <b-button class="button1" variant="outline-primary" @click="saveScrapOpinion">Save Scrap Opinion</b-button>
-      <b-button variant="outline-primary" @click="isBookmarked ? removeBookmark() : addBookmark()" :class="{ 'bookmarked': isBookmarked }">
+      <b-button variant="outline-primary" @click="toggleBookmark" :class="{ 'bookmarked': isBookmarked }">
         {{ isBookmarked ? 'Bookmarked' : 'Bookmark' }}
       </b-button>
     </div>
   </div>
 
-    <!-- keyword NEWS  -->
     <div v-if="this.keyword.length!=0" class="container my-5">
       <h5>{{this.keyword}}</h5>
       <hr/>
@@ -52,9 +51,7 @@
     </div>
     <hr />
   </div>
-
-
-  </template>
+</template>
   
 
 
@@ -73,11 +70,11 @@ export default {
   data() {
     return {
       article: {},
-      scrap_opinion: "",
-      isBookmarked: false,
+      scrapOpinion: "",
+      isBookmarked: false, // 기본값으로 초기화
       keywordnewsList: [],
-      keyword: ''
-    };
+      keyword: ""
+      };
   },
 
   mounted() {
@@ -110,6 +107,8 @@ export default {
       })
       .then((response) => {
         this.article = response.data;
+        this.isBookmarked = response.data.bookmarked;
+        this.scrapOpinion = response.data.scrap_opinion;
         console.log(this.article);
       })
       .catch((error) => {
@@ -129,34 +128,37 @@ export default {
     }
   },
 
+  toggleBookmark() {
+      if (this.isBookmarked) {
+        this.removeBookmark();
+      } else {
+        this.addBookmark();
+      }
+    },
+
   saveScrapOpinion() {
-    const accessToken = localStorage.getItem("accessToken");
-    const scrapOpinionApiUrl = `http://localhost:8082/api/scrap/new/${this.newsId}`;
+      const accessToken = localStorage.getItem("accessToken");
+      const scrapOpinionApiUrl = `http://localhost:8082/api/scrap/new/${this.newsId}`;
 
-    // 요청 본문에 opinion 값을 추가하여 전송합니다.
-    const requestData = {
-      opinion: this.scrap_opinion 
-    };
+      const requestData = {
+        opinion: this.scrapOpinion 
+      };
 
-    console.log(accessToken);
-    console.log(scrapOpinionApiUrl);
-    console.log(requestData);
-
-    axios
-      .post(scrapOpinionApiUrl, requestData, {
-        headers: {
+      axios
+        .post(scrapOpinionApiUrl, requestData, {
+          headers: {
             Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'application/json', 
           },
-      })
-      .then(response => {
+        })
+        .then(response => {
           alert('저장되었습니다!');
-        
-      })
-      .catch(error => {
-        next('/login');
-        alert('해당 기능에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
-      });
+          this.article.scrap_opinion = this.scrapOpinion; // scrapOpinion 값을 뷰에 반영
+        })
+        .catch(error => {
+          next('/login');
+          alert('해당 기능에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
+        });
   },
 
     addBookmark() {
@@ -207,8 +209,6 @@ export default {
   console.log(newsId);
   window.location.href = `/newspage/${newsId}`;
 }
-
-
   },
 };
 </script>
