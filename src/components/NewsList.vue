@@ -63,7 +63,7 @@
 
 <script>
 import axios from "axios";
-import authService from "../authService.js";
+import  authService from "../authService.js";
 
 export default {
   data() {
@@ -106,7 +106,7 @@ export default {
   methods: {
     fetchNews() {
       console.log(this.currentPage);
-      const apiUrl = `http://localhost:8082/api/news?job=all&page=${this.currentPage}`;
+      const apiUrl = `https://job-brief-mjucapstone.com/api/news?job=all&page=${this.currentPage}`;
       console.log(apiUrl);
 
       axios
@@ -122,19 +122,36 @@ export default {
     goToPage(page) {
       if (page !== this.currentPage) {
         this.currentPage = page;
-        this.fetchNews();
+
+        // 검색 결과 페이지에서는 검색 결과를 가져오도록 수정
+        if (this.searchValue && this.selectedType) {
+          this.searchNews();
+        } else {
+          this.fetchNews();
+        }
       }
     },
+
     prevPage() {
       if (this.currentPage > 1) {
         this.currentPage--;
-        this.fetchNews();
+        // 검색 결과 페이지에서는 검색 결과를 가져오도록 수정
+        if (this.searchValue && this.selectedType) {
+          this.searchNews();
+        } else {
+          this.fetchNews();
+        }
       }
     },
     nextPage() {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
-        this.fetchNews();
+        // 검색 결과 페이지에서는 검색 결과를 가져오도록 수정
+        if (this.searchValue && this.selectedType) {
+          this.searchNews();
+        } else {
+          this.fetchNews();
+        }
       }
     },
     goToNews(newsId) {
@@ -147,7 +164,7 @@ export default {
       }
 
       console.log(this.currentPage);
-      const apiUrl = `http://localhost:8082/api/news/search?type=${this.selectedType}&keyword=${this.searchValue}`;
+      const apiUrl = `https://job-brief-mjucapstone.com/api/news/search?type=${this.selectedType}&keyword=${this.searchValue}`;
       console.log(apiUrl);
 
       axios
@@ -160,8 +177,25 @@ export default {
         .catch((error) => {
           console.error("API 오류:", error);
         });
-    }
     },
+    searchNews() {
+      console.log(this.currentPage);
+      const apiUrl = `https://job-brief-mjucapstone.com/api/news/search?type=${this.selectedType}&keyword=${this.searchValue}&page=${this.currentPage}`;
+      console.log(apiUrl);
+
+      axios
+          .get(apiUrl)
+          .then((response) => {
+            this.newsList = response.data.newsList;
+            console.log(this.newsList);
+            this.totalPages = response.data.totalPages;
+          })
+          .catch((error) => {
+            console.error("API 오류:", error);
+          });
+    }
+
+  },
 };
 </script>
 
